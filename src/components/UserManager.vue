@@ -42,14 +42,7 @@
               </el-form-item>
             </el-form>
       <div class="table-section">
-        <el-table :data="tableData"
-                  :header-cell-style="tableHeaderColor"
-                  ref="multipleTable"
-                  style="width: 100%"
-                  :row-class-name="tableRowClassName"
-                  border
-                  size="small"
-                  @selection-change="handleSelectionChange">
+        <el-table :data="tableData" border>
           <el-table-column type="selection" width="55" align="center"></el-table-column>
           <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
           <el-table-column prop="userId" label="用户ID" width="180" sortable align="center"></el-table-column>
@@ -66,14 +59,32 @@
           <el-table-column prop="clientVersion" label="客户端版本" align="center"></el-table-column>
         </el-table>
       </div>
+      <!-- 分页区域 -->
+      <el-pagination
+        @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="queryInfo.page_no" :page-sizes="[3, 5, 10, 20]"
+        :page-size="queryInfo.page_size" layout="total, sizes, prev, pager, next, jumper" :total="total_count">
+      </el-pagination>
     </el-card>
   </div>
 </template>
 <script>
 export default {
-  name: 'topbar',
   data () {
     return {
+      // 这个是页面加载时传过去的参数
+      // 这个是返回给 上面渲染页面的数组对象
+      queryInfo: {
+        user_id: '',
+        name: '',
+        r_code: '',
+        order_by: id,
+        filter: '',
+        page_no: 1,
+        page_size: 10,
+        auth_id: 'admin',
+        auth_token: window.sessionStorage.getItem('token')
+      },
       formInline: {
         scenename: '',
         des: ''
@@ -83,11 +94,50 @@ export default {
       multipleSelection: []
     }
   },
+  created () {
+    this.getUserList()
+  },
   methods: {
+    async getUserList () {
+      const { data: res} = await this.$http.get('/admin/users', { params: this.queryInfo})
+      if (res.code !== 0) {
+        return this.$message.error('获取用户列表失败')
+      } else {
+        // 这里成功的获取道理数据，并且保存道理data上
+        console.log(res)
+        this.tableData = res.data.list
+        this.total = res.data.total
+        return this.$message.success('获取用户列表成功')
+      }
+    },
+    // 搜索的函数方法
     onSearch () {
     },
+    // 清空的函数方法
     clearAll () {
     },
+    // 查看的函数方法
+    handleEdit (index, row) {
+      console.log(index, row)
+    },
+    // 删除的函数方法
+    handleDelete (index, row) {
+      console.log(index, row)
+    },
+    // 这是监听分页的两个方法
+    // 监听 pagesize 改变事件
+    handleSizeChange (newSize) {
+      //  console.log(newSize)
+      this.queryInfo.page_size = newSize
+      this.getUserList()
+    },
+    // 监听页码值的改变
+    handleCurrentChange (newPage) {
+      // console.log(newPage)
+      this.queryInfo.page_no = newPage
+      this.getUserList()
+    },
+    // teplate 模板里面的 3 个方法
     tableRowClassName ({row, rowIndex}) {
       if (rowIndex === 1) {
         return 'warning-row'
@@ -98,24 +148,6 @@ export default {
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
-    },
-    // toggleSelection(rows) {
-    //   if (rows) {
-    //     rows.forEach(row => {
-    //       this.$refs.multipleTable.toggleRowSelection(row);
-    //     });
-    //   } else {
-    //     this.$refs.multipleTable.clearSelection();
-    //   }
-    // },
-    // filterTag(value, row) {
-    //   return row.tag === value;
-    // },
-    // handleEdit(index, row) {
-    //   console.log(index, row);
-    // },
-    handleDelete (index, row) {
-      console.log(index, row)
     },
     tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 0) {
