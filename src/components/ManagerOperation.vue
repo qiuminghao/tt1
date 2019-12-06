@@ -16,20 +16,7 @@
           <!--<el-button icon="el-icon-refresh-left" @click="clearAll()">清空</el-button>-->
         </el-form-item>
       </el-form>
-<!--      <el-form :inline="true" :model="formInline2" class="demo-form-inline2" size="small">-->
-<!--        <el-form-item>-->
-<!--          <el-button type="primary" style="background:rgb(14,122,162)"><i class="el-icon-plus"></i>新增</el-button>-->
-<!--          <el-button type="primary" style="background:rgb(14,122,162)">编辑</el-button>-->
-<!--          <el-button type="primary" style="background:rgb(14,122,162)">删除</el-button>-->
-<!--&lt;!&ndash;          <el-button type="info">刷新数据</el-button>&ndash;&gt;-->
-<!--&lt;!&ndash;          <el-button type="warning">导出excel</el-button>&ndash;&gt;-->
-<!--&lt;!&ndash;          <el-button @click="toggleSelection()">取消选择</el-button>&ndash;&gt;-->
-<!--&lt;!&ndash;          <el-button type="danger">隐藏搜索栏</el-button>&ndash;&gt;-->
-<!--        </el-form-item>-->
-<!--      </el-form>-->
       <div class="table-section">
-<!--        <span>当前表格已选择 0 项  </span>-->
-<!--        <el-button type="text" style="color:rgb(14,122,162)" @click="toggleSelection()">清空</el-button>-->
         <el-table :data="tableData"
                   :header-cell-style="tableHeaderColor"
                   ref="multipleTable"
@@ -40,123 +27,130 @@
                   @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center"></el-table-column>
           <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
-          <el-table-column prop="date" label="日期" width="180" align="center"></el-table-column>
-          <el-table-column prop="name" label="管理员ID" width="180" sortable align="center"></el-table-column>
-          <el-table-column prop="name" label="类型" width="180" sortable align="center"></el-table-column>
-          <el-table-column prop="title" label="标题" width="180" sortable align="center"></el-table-column>
-          <el-table-column prop="content" label="内容" width="180" sortable align="center"></el-table-column>
+          <el-table-column prop="date" label="日期" width="100" align="center"></el-table-column>
+          <el-table-column prop="name" label="管理员ID" width="100" sortable align="center"></el-table-column>
+          <el-table-column prop="name" label="类型" width="100" sortable align="center"></el-table-column>
+          <el-table-column prop="title" label="标题" width="100" sortable align="center"></el-table-column>
+          <el-table-column prop="content" label="内容" width="100" sortable align="center"></el-table-column>
           <el-table-column prop="address" label="IP" align="center"></el-table-column>
-          <el-table-column prop="time" label="操作时间" width="180" sortable align="center"></el-table-column>
-<!--          <el-table-column-->
-<!--            prop="tag"-->
-<!--            label="标签"-->
-<!--            width="100"-->
-<!--            :filters="[{ text: '学校', value: '学校' }, { text: '公司', value: '公司' }]"-->
-<!--            :filter-method="filterTag"-->
-<!--            filter-placement="bottom-end"-->
-<!--            align="center">-->
-<!--            <template slot-scope="scope">-->
-<!--              <el-tag-->
-<!--                :type="scope.row.tag === '学校' ? 'primary' : 'success'"-->
-<!--                disable-transitions>{{scope.row.tag}}-->
-<!--              </el-tag>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-          <el-table-column label="操作" fixed="right" align="center">
+          <el-table-column prop="time" label="操作时间" width="100" sortable align="center"></el-table-column>
+          <el-table-column label="操作" fixed="right" align="center" width="70">
             <template slot-scope="scope">
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                icon="el-icon-view"-->
-<!--                @click="handleEdit(scope.$index, scope.row)">查看</el-button>-->
               <el-button
                 size="mini"
                 type="danger"
                 icon="el-icon-delete"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="handleDelete(scope.row.id)">删除</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" fixed="right" align="center" width="70">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                icon="el-icon-view"
+                @click="handleEdit(scope.row.id)">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
+      <!-- 分页区域 -->
+      <el-pagination
+        @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="queryInfo.page_no" :page-sizes="[3, 5, 10, 20]"
+        :page-size="queryInfo.page_size" layout="total, sizes, prev, pager, next, jumper" :total="total_count">
+      </el-pagination>
     </el-card>
   </div>
 </template>
 <script>
-  export default {
-    name: 'topbar',
-    data() {
-      return {
-        formInline: {
-          scenename: '',
-          des: ''
-        },
-        formInline2: {},
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '公司'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '学校'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '学校'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '公司'
-        }],
-        multipleSelection: []
-      };
+export default {
+  name: 'topbar',
+  data () {
+    return {
+      // 这个是搜索功能里面定义的两个搜索对象 等待被渲染的对象
+      formInline: {
+        scenename: '',
+        des: ''
+      },
+      // 这个是页面加载时传过去的参数
+      queryInfo: {
+        admin_id: '',
+        title: '',
+        page_no: 1,
+        page_size: 10,
+        auth_id: 'admin',
+        auth_token: '1575599223578adminAzxzdbTU2on5dMgI'
+      },
+      // 这个是返回给 上面渲染页面的数组对象
+      tableData: [],
+      // multipleSelection 当前这个对象在temlelate里面没有定义
+      multipleSelection: []
+    }
+  },
+  created () {
+    this.getUserList()
+  },
+  methods: {
+    async getUserList () {
+      // 当页面加载时就会发起一次get的url请求
+      // eslint-disable-next-line standard/object-curly-even-spacing,no-unused-vars
+      const { data: res} = await this.$http.get('/admin/admin_logs', { params: this.queryInfo})
+      if (res.code !== 0) {
+        return this.$message.error('获取用户列表失败')
+      } else {
+        // 这里成功的获取道理数据，并且保存道理data上
+        console.log(res)
+        this.tableData = res.data.list
+        this.total = res.data.total
+        return this.$message.success('获取用户列表成功')
+      }
     },
-    methods: {
-      onSearch() {
-      },
-      clearAll() {
-        this.formInline.scenename = '',
-          this.formInline.des = ''
-      },
-      tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }
-        return '';
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      // toggleSelection(rows) {
-      //   if (rows) {
-      //     rows.forEach(row => {
-      //       this.$refs.multipleTable.toggleRowSelection(row);
-      //     });
-      //   } else {
-      //     this.$refs.multipleTable.clearSelection();
-      //   }
-      // },
-      // filterTag(value, row) {
-      //   return row.tag === value;
-      // },
-      // handleEdit(index, row) {
-      //   console.log(index, row);
-      // },
-      handleDelete(index, row) {
-        console.log(index, row);
-      },
-      tableHeaderColor({ row, column, rowIndex, columnIndex }) {
-        if (rowIndex === 0) {
-          return 'background-color:rgb(250,250,250);'
-        }
-      },
+    // 搜索的函数方法
+    onSearch () {
+    },
+    // 清空的函数方法
+    clearAll () {
+    },
+    // 查看的函数方法
+    handleEdit (index, row) {
+      console.log(index, row)
+    },
+    // 删除的函数方法
+    handleDelete (index, row) {
+      console.log(index, row)
+    },
+    // 这是监听分页的两个方法
+    // 监听 pagesize 改变事件
+    handleSizeChange (newSize) {
+      //  console.log(newSize)
+      this.queryInfo.page_size = newSize
+      this.getUserList()
+    },
+    // 监听页码值的改变
+    handleCurrentChange (newPage) {
+      // console.log(newPage)
+      this.queryInfo.page_no = newPage
+      this.getUserList()
+    },
+    // teplate 模板里面的 3 个方法
+    tableRowClassName ({row, rowIndex}) {
+      if (rowIndex === 1) {
+        return 'warning-row'
+      } else if (rowIndex === 3) {
+        return 'success-row'
+      }
+      return ''
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
+      if (rowIndex === 0) {
+        return 'background-color:rgb(250,250,250);'
+      }
     }
   }
+}
 </script>
 
 <style scoped>

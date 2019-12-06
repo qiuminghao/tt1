@@ -85,87 +85,87 @@
   </div>
 </template>
 <script>
-  export default {
-    name: 'topbar',
-    data() {
-      return {
-        formInline: {
-          scenename: '',
-          des: ''
-        },
-        formInline2: {},
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '公司'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '学校'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '学校'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '公司'
-        }],
-        multipleSelection: []
-      };
+export default {
+  name: 'topbar',
+  data () {
+    return {
+      formInline: {
+        scenename: '',
+        des: ''
+      },
+      formInline2: {},
+      tableData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄',
+        tag: '公司'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄',
+        tag: '学校'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄',
+        tag: '学校'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄',
+        tag: '公司'
+      }],
+      multipleSelection: []
+    }
+  },
+  methods: {
+    handleClick () {
+      alert('button click')
     },
-    methods: {
-      handleClick() {
-        alert('button click');
-      },
-      onSearch() {
-      },
-      clearAll() {
-        this.formInline.scenename = '',
-          this.formInline.des = ''
-      },
-      tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }
-        return '';
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      filterTag(value, row) {
-        return row.tag === value;
-      },
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      },
-      tableHeaderColor({ row, column, rowIndex, columnIndex }) {
-        if (rowIndex === 0) {
-          return 'background-color:rgb(250,250,250);'
-        }
-      },
-      refreshAll(){
-      },
+    onSearch () {
+    },
+    clearAll () {
+      this.formInline.scenename = '',
+      this.formInline.des = ''
+    },
+    tableRowClassName ({row, rowIndex}) {
+      if (rowIndex === 1) {
+        return 'warning-row'
+      } else if (rowIndex === 3) {
+        return 'success-row'
+      }
+      return ''
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    toggleSelection (rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+    filterTag (value, row) {
+      return row.tag === value
+    },
+    handleEdit (index, row) {
+      console.log(index, row)
+    },
+    handleDelete (index, row) {
+      console.log(index, row)
+    },
+    tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
+      if (rowIndex === 0) {
+        return 'background-color:rgb(250,250,250);'
+      }
+    },
+    refreshAll () {
     }
   }
+}
 </script>
 
 <style scoped>

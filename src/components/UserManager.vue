@@ -1,4 +1,5 @@
 <template>
+  <!--卡片试图区域-->
   <div class="scene-container">
     <el-card class="card1">
       <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
@@ -63,101 +64,66 @@
           <el-table-column prop="time" label="注册时间" width="180" sortable align="center"></el-table-column>
           <el-table-column prop="logPlatform" label="登录平台" align="center"></el-table-column>
           <el-table-column prop="clientVersion" label="客户端版本" align="center"></el-table-column>
-<!--          <el-table-column label="操作" fixed="right" align="center">-->
-<!--            <template slot-scope="scope">-->
-<!--                            <el-button-->
-<!--                              size="mini"-->
-<!--                              icon="el-icon-view"-->
-<!--                              @click="handleEdit(scope.$index, scope.row)">查看</el-button>-->
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                type="danger"-->
-<!--                icon="el-icon-delete"-->
-<!--                @click="handleDelete(scope.$index, scope.row)">删除</el-button>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
         </el-table>
       </div>
     </el-card>
   </div>
 </template>
 <script>
-  export default {
-    name: 'topbar',
-    data() {
-      return {
-        formInline: {
-          scenename: '',
-          des: ''
-        },
-        formInline2: {},
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '公司'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '学校'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '学校'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '公司'
-        }],
-        multipleSelection: []
-      };
+export default {
+  name: 'topbar',
+  data () {
+    return {
+      formInline: {
+        scenename: '',
+        des: ''
+      },
+      formInline2: {},
+      tableData: [],
+      multipleSelection: []
+    }
+  },
+  methods: {
+    onSearch () {
     },
-    methods: {
-      onSearch() {
-      },
-      clearAll() {
-        this.formInline.scenename = '',
-          this.formInline.des = ''
-      },
-      tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }
-        return '';
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      // toggleSelection(rows) {
-      //   if (rows) {
-      //     rows.forEach(row => {
-      //       this.$refs.multipleTable.toggleRowSelection(row);
-      //     });
-      //   } else {
-      //     this.$refs.multipleTable.clearSelection();
-      //   }
-      // },
-      // filterTag(value, row) {
-      //   return row.tag === value;
-      // },
-      // handleEdit(index, row) {
-      //   console.log(index, row);
-      // },
-      handleDelete(index, row) {
-        console.log(index, row);
-      },
-      tableHeaderColor({ row, column, rowIndex, columnIndex }) {
-        if (rowIndex === 0) {
-          return 'background-color:rgb(250,250,250);'
-        }
-      },
+    clearAll () {
+    },
+    tableRowClassName ({row, rowIndex}) {
+      if (rowIndex === 1) {
+        return 'warning-row'
+      } else if (rowIndex === 3) {
+        return 'success-row'
+      }
+      return ''
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    // toggleSelection(rows) {
+    //   if (rows) {
+    //     rows.forEach(row => {
+    //       this.$refs.multipleTable.toggleRowSelection(row);
+    //     });
+    //   } else {
+    //     this.$refs.multipleTable.clearSelection();
+    //   }
+    // },
+    // filterTag(value, row) {
+    //   return row.tag === value;
+    // },
+    // handleEdit(index, row) {
+    //   console.log(index, row);
+    // },
+    handleDelete (index, row) {
+      console.log(index, row)
+    },
+    tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
+      if (rowIndex === 0) {
+        return 'background-color:rgb(250,250,250);'
+      }
     }
   }
+}
 </script>
 
 <style scoped>
